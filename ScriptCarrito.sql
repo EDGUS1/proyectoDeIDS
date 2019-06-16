@@ -1,4 +1,3 @@
-.sql
 -- ------------------------------------------------------
 -- TUTORIAL DE COMO HACER UN CARRITO DE COMPRAS USANDO
 -- EL MODELO VISTA CONTROLADOR
