@@ -1,0 +1,229 @@
+<?php
+ require "templates/conexion.php";
+ ?>
+<!DOCTYPE html>
+        <div class="row">
+ <div id="myCarousel" class="carousel carousel-fade slide" data-ride="carousel">
+    <div class="carousel-inner" role="listbox">
+      <div class="item active">
+        <img src="templates/imgs/slider-producto-2.jpg" alt="no image" class="img-responsive">
+        <div class="carousel-caption">
+          <div class="col-md-6 pull-right bg-lim-c caption-lim-right">
+          <p>Las mejores marcas</p>
+        </div>
+        </div>
+      </div>
+
+      <div class="item">
+
+        <img src="templates/imgs/slider-producto-4.jpg" alt="no image" class="img-responsive">
+        <div class="carousel-caption">
+          <div class="col-md-6 pull-left bg-lim-c caption-lim-left">
+          <p>Atención Personalizada</p>
+        </div>
+        </div>
+      </div>
+    </div>
+ <br>
+    <!-- controles -->
+    <a class="left carousel-control color-lim" href="#myCarousel" role="button" data-slide="prev">
+      <i class="fa fa-arrow-left" aria-hidden="true"></i>
+    </a>
+    <a class="right carousel-control color-lim" href="#myCarousel" role="button" data-slide="next">
+      <i class="fa fa-arrow-right" aria-hidden="true"></i>
+    </a>
+  </div>
+ </div>
+            <div class="shop-items">
+        <?php
+    if( !isset($_GET['show']) ){
+        include "busqueda/motor.php";
+            $filas = mysqli_query($cnx, $consulta);
+            while($columnas = mysqli_fetch_assoc($filas)){
+
+            ?>
+            <div class="item flex">
+                            <!-- Imagen -->
+                        <a href="index.php?section=1&show=<?php echo $columnas['id_producto']; ?>">
+            <img class="img-responsive" src="productos/<?php echo $columnas['foto']; ?>" alt="<?php echo $columnas['nombre']; ?>">
+                        </a>
+                            <!-- Detalle -->
+                            <div class="item-dtls">
+                                <!-- title -->
+                                <h5><a href="index.php?section=1&show=<?php echo $columnas['id_producto']; ?>"><?php
+                                $title = $columnas['nombre'];
+                                $newtext = substr($title, 0, 22) . "...";
+                                echo $newtext;?></a></h5>
+                                <!-- precio-->
+                                <span class="price lblue">$<?php echo $columnas['precio']; ?></span>
+                            </div>
+                            <div class="ecom bg-lim d-inline">
+                                <a class="btn btn-perso" href="index.php?section=1&show=<?php echo $columnas['id_producto']; ?>"><i class="fa fa-info" aria-hidden="true"></i></a> <span style="color:white">| </span>
+                                <a class="btn btn-perso">+<i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                <?php
+            }
+            ?>
+   </div>
+    <br>
+  <?php
+        }else{
+            ?>
+      <div class="row">
+         <div class="content-wrapper-pl">
+          <?php
+      $p = $_GET['show'];
+      $consulta = "SELECT * FROM productos INNER JOIN marcas ON productos.id_marca = marcas.id_marca WHERE productos.id_producto = $p";
+      $fila = mysqli_query($cnx, $consulta);
+      $columnas = mysqli_fetch_assoc($fila);
+    ?>
+    <div class="item-container">
+      <div class="container-fluid p-1 m-auto b-lim">
+        <div class="col-md-4 m-auto text-center">
+          <div class="p-1 service-image-left">
+            <center >
+              <a style="cursor:zoom-in" data-toggle="modal" data-target="#verfoto">
+    <img class="card-img-top img-fluid img-responsive m-auto" src="productos/<?php echo $columnas['foto']; ?>" alt="<?php echo $columnas['nombre'] ?>">
+       </a>
+            </center>
+          </div>
+        </div>
+
+        <div class="col-md-7">
+          <div class="product-title"><?php echo $columnas['nombre']; ?>
+ </div>
+           <div class="product-desc"> <?php echo $columnas['presentacion']; ?> </div>
+          <div class="product-rating"><i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star gold"></i> <i class="fa fa-star-o"></i> </div>
+          <hr>
+          <div class="product-price">$ <?php echo $columnas['precio']; ?> <moneda>ARS</moneda></div>
+          <hr>
+          <div class="stock"><p>Stock:
+            <?php
+            if (strcasecmp($columnas['stock'], 'si') === 0) {
+            echo '<span class="product-stock st-si">' .$columnas['stock'] ."</span>";
+          }
+          else{
+          echo '<span class="product-stock st-no">' .$columnas['stock'] ."</span>";
+          }
+            ?></p> </div>
+          <hr>
+          <div class="btn-group cart">
+            <button type="button" class="btn bg-lim white" alt="Agregar al carrito" title="Agregar al carrito">
+              Añadir al carrito <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+     </div>
+    <div class="modal fade z-10000" id="verfoto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document" style="width:65%;">
+    <div class="modal-content" data-dismiss="modal">
+      <a style="position: absolute;top:1em;right:1em;cursor:pointer;" data-dismiss="modal">X</a>
+  <img class="img-fluid img-responsive m-auto" src="productos/<?php echo $columnas['foto']; ?>" alt="<?php echo $columnas['nombre'] ?>" title="<?php echo $columnas['nombre'] ?>">
+    </div>
+  </div>
+ </div>
+  </div>
+    <div class="container-fluid-pl">
+      <div class="col-md-12 product-info">
+          <ul id="myTab" class="nav nav-tabs menu-pl">
+
+            <li class="active"><a href="#service-one" data-toggle="tab">DESCRIPCIÓN</a></li>
+            <li><a href="#service-three" data-toggle="tab">CALIFICACIÓNES</a></li>
+            <li><a href="#service-two" data-toggle="tab">PAGOS & ENVIOS</a>
+  </li>
+
+          </ul>
+        <div id="myTabContent" class="tab-content container-fluid">
+            <div class="tab-pane fade in active" id="service-one">
+
+              <section class="container-pl product-info">
+                <h3>Descripción</h3>
+                <p><?php echo $columnas['descripcion']; ?></p>
+              </section>
+
+            </div>
+          <div class="tab-pane fade" id="service-two">
+
+            <section class="container-pl product-info">
+              <div class="col-md-6">
+              <h3 style="margin:0 auto;">Medios de pago</h3>
+              <hr>
+                <p>En ********* utilizamos los medios de pago brindados por <a href="https://www.mercadopago.com.ar" target="_BLANK"><span style="color:rgba(0,0,255,.8);">MERCADOPAGO</span></a>.</p>
+                </div>
+              <div class="col-md-6">
+                <p style="font-size:1.5em;">En hasta 36 cuotas con tarjeta</p>
+                <p style="font-size:1.1em;color:green;"><i class="fa fa-clock-o" aria-hidden="true"></i> Acreditación instantánea.</p>
+                <div class="col-md-3">
+                  <div class="visa d-inline-block"></div>
+                  <div class="amex d-inline-block"></div>
+                  </div>
+                </div>
+            </section>
+
+          </div>
+          <div class="tab-pane fade" id="service-three">
+
+            <?php
+    $consulta = "SELECT * FROM comentarios INNER JOIN usuarios ON
+    comentarios.id_usuario = usuarios.id_usuario WHERE comentarios.id_producto = $p
+    ORDER BY comentarios.id_comentario DESC";
+    $filas = mysqli_query($cnx, $consulta);
+    while($columnas = mysqli_fetch_assoc($filas) ){
+            ?>
+
+            <div class="card-body comentarios p-1 container-fluid">
+                                    <h3>
+                                        <div class="reviews-rating stars-5">
+    </div>
+                                    </h3>
+                                    <!--Commentario-->
+                                    <p itemprop="reviewBody" id="comentario"><?php echo $columnas['comentario']; ?></p>
+
+                                    <!--Footer comentario -->
+                                    <div class="footer">
+                                            <img class="avatar z-depth-1" src="templates/imgs/avatars/1.jpg" alt="Foto comment">
+                                            <span class="author" itemprop="author"><?php echo $columnas['nombre']; ?></span>
+                                            <span><smaller><?php echo $columnas['fecha']; ?></smaller></span>
+                                        </a>
+                                        <div class="pull-right text-muted" itemprop="reviewRating" itemscope="" itemtype="http://schema.org/Rating">                 <meta itemprop="worstRating" content="1">                 <meta itemprop="bestRating" content="5">                 <meta itemprop="ratingValue" content="5">
+
+                                        </div>
+                                    </div>
+
+                                </div>
+            <?php
+    }
+      if(isset($_SESSION['id_usuario'])){
+    ?>
+
+      <form action="templates/agregar/guardarComentario.php" method="post">
+      <input type="text" name="comentario" placeholder="Califica este producto." class="comentario_box">
+      <input type="hidden" name="usuario" value="<?php echo $_SESSION['id_usuario']?>">
+      <input type="hidden" name="producto" value="<?php echo $p;?>">
+      <input type="submit" value="Enviar calificación" class="btn-lim bg-lim">
+      </form>
+
+    <?php
+    }
+    ?>
+          </div>
+        </div>
+        <hr>
+      </div>
+    </div>
+        <div class="col-md-12">
+            <h5 class="m-0">Productos Relacionados</h5>
+            <div class="col-md-9" style="color:red;">
+                <small>Contenido faltante</small>
+            </div>
+        </div>
+
+            </div>
+          </div>
+
+  <?php
+  }
+  ?>
+  </div>
