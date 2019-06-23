@@ -1,5 +1,11 @@
 <?php
+session_start();
 	include "conexion.php";
+	if(isset($_SESSION['Usuario'])){
+
+	}else{
+		header("Location: ./index.php?Error=Acceso denegado");
+	}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -22,8 +28,8 @@
 	  <menu>
 	    <li><a href="./">Inicio</a></li>
 	    <li><a href="#" class="selected">Admin</a></li>
-	    <li><a href="#" >Agregar</a></li>
-	    <li><a href="#">Salir</a></li>
+	    <li><a href="./admin/agregarproducto.php" >Agregar</a></li>
+	    <li><a href="./login/cerrar.php">Salir</a></li>
 	  </menu>
 	</nav>
 
